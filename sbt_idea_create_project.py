@@ -2,7 +2,7 @@
 
 """Create a skeleton project with SBT and the SBT Idea plugin"""
 
-import argparse
+import sys
 import os
 from string import Template
 
@@ -61,19 +61,24 @@ class ${proj}Spec extends Specification {
 
 '''
 
+def usage():
+    """Print a usage message, then exit."""
+    
+    print >> sys.stderr, "Usage: " + sys.argv[0] \
+        + " group artifact [version]"
+    sys.exit(-1)
+
 def main():
-    parser = argparse.ArgumentParser(description=
-                                     'Create a template Scala project.')
-    parser.add_argument('group', type=str)
-    parser.add_argument('artifact', type=str)
-    parser.add_argument('version', type=str, default='0.1.0', nargs='?')
-    args = parser.parse_args()
-    
-    group = args.group
-    artifact = args.artifact
-    version = args.version
-    
-    # Create all the directory
+    if len(sys.argv) < 3:
+        usage()
+
+    group = sys.argv[1]
+    artifact = sys.argv[2]
+    version = "0.1.0"
+    if len(sys.argv) > 3:
+        version = sys.argv[3]
+        
+    # Create all the directories
     for directory in DIRECTORIES:
         os.makedirs(directory)
 
